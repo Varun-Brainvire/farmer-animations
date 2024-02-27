@@ -51,10 +51,15 @@ const FarmerFile = () => {
           </motion.span>
         );
       })}
+
       {/* Animation on button */}
+
       <div>
         <motion.button whileTap={{ scale: 0.85 }}>Click me!</motion.button>
       </div>
+
+      {/* Stagger Animation */}
+      
       <div ref={scope}>
         <h4>Stagger Animation</h4>
         <button onClick={(prev) => setOpen(!open)} className="stagger-button">Click For Stagger Animations</button>
