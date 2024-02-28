@@ -1,12 +1,28 @@
 import React, { useEffect, useState } from "react";
-import { motion, useAnimate, stagger } from "framer-motion";
+import {
+  motion,
+  useAnimate,
+  stagger,
+  useMotionValue,
+  useTransform,
+} from "framer-motion";
+import Card from "./Card";
 
 const FarmerFile = () => {
   const text = "Varun Rokade working in BrainVire".split(" ");
   const [scope, animate] = useAnimate();
   const [open, setOpen] = useState(false);
   const items = ["Item 1", "Item 2", "Item 3", "Item 4"];
+  const cardItems = [
+    { Item_1: "Item 1" },
+    { Item_2: "Item 2" },
+    { Item_3: "Item 3" },
+    { Item_4: "Item 4" }
+  ];
   const staggerList = stagger(0.1, { startDelay: 0.25 });
+  const count = useMotionValue(0);
+  const rounded = useTransform(count, Math.round);
+
 
   useEffect(() => {
     animate(
@@ -34,6 +50,15 @@ const FarmerFile = () => {
     );
   }, [open]);
 
+  // for Number Count animation
+
+  useEffect(() => {
+    const animation = animate(count, 50, { duration: 2 });
+    return animation.stop;
+  }, []);
+
+  console.log(rounded,"rounded")
+
   return (
     <div className="text-div">
       {text.map((letter, i) => {
@@ -59,19 +84,57 @@ const FarmerFile = () => {
       </div>
 
       {/* Stagger Animation */}
-      
-      <div ref={scope}>
+
+      <div
+        ref={scope}
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
         <h4>Stagger Animation</h4>
-        <button onClick={(prev) => setOpen(!open)} className="stagger-button">Click For Stagger Animations</button>
+        <button onClick={(prev) => setOpen(!open)} className="stagger-button">
+          Click For Stagger Animations
+        </button>
 
         <ul>
-      {items.map((item,index) =>{
-        return(
-            <motion.li>{item}</motion.li>
-        )
-      })}
-
+          {items.map((item, index) => {
+            return <motion.li>{item}</motion.li>;
+          })}
         </ul>
+      </div>
+      <div>
+        <motion.h1>{rounded}</motion.h1>
+      </div>
+      <div style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}>
+        {items.map((item,index) => {
+          return (
+            <div>
+             <motion.div
+        className="card"
+        initial={{
+          opacity: 0,
+          x: index % 2 === 0 ? 50 : -50,
+        }}
+        whileInView={{
+          opacity: 1,
+          x: 0,
+          transition: {
+            duration: 1,
+          },
+        }}
+        viewport={{ once: false }}
+      >
+        <p className="card-text">{item}</p>
+      </motion.div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
